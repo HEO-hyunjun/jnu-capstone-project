@@ -10,7 +10,6 @@ let viewController = ViewController()
 
 struct SingleInterviewCategory: View {
     let cf:ContextFlow
-    
     var body: some View {
         NavigationStack{
             VStack{
