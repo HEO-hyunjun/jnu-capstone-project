@@ -58,7 +58,6 @@ class ChatGPTAPI: @unchecked Sendable {
             _ = historyList.removeFirst()
             messages = generateMessages(from: text)
         }
-        print(messages)
         return messages
     }
     
@@ -83,7 +82,6 @@ class ChatGPTAPI: @unchecked Sendable {
     
     func getFeedback(text: String) async throws -> String {
         var urlRequest = self.urlRequest
-        
         urlRequest.httpBody = try jsonBody(text: text, stream: false)
         
         let (data, response) = try await urlSession.data(for: urlRequest)

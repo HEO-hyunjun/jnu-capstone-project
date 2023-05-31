@@ -8,7 +8,7 @@
 import Foundation
 
 struct APIConstants{
-    static let baseURL="https://d177-58-125-187-44.ngrok-free.app"
+    static let baseURL="https://d0c3-218-149-39-161.ngrok-free.app"
     
     static let getCreativityURL=baseURL+"/question/creativity"
     static let getPersonalityURL=baseURL+"/question/personality"

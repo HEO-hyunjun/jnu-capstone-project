@@ -17,7 +17,8 @@ struct FeedbackView: View {
     @State private var messages:[FeedbackButtonView] = []
 
     @EnvironmentObject var appState: AppState
-    
+    @State private var isFullFeedback: Bool = false
+    @State private var fullFeedbackText: String = ""
     let coloredNavAppearance = UINavigationBarAppearance()
 //    init(vm: ViewModel,GoToHome:Binding<Bool>){
 //        self.vm = vm
@@ -51,10 +52,89 @@ struct FeedbackView: View {
                         self.messages.append(FeedbackButtonView(message: m,isAssistant: true))
                     }
                 }
+        if(cf?.dialogType == ContextFlow.DialogType.real)
+        {
+            Button(action:{
+                isFullFeedback = true
+            },label:{
+//                Text("면접 전체 피드백")
+//                    .font(.custom("Arial", size: 25))
+//                    .foregroundColor(Color.black)
+            }).buttonStyle(PlainButtonStyle())
+                .frame(height:80)
+                .sheet(isPresented: $isFullFeedback, content: {
+                    ScrollView{
+                        VStack{
+                            if(fullFeedbackText == ""){
+                                DotLoadingView().frame(width: 90, height: 45)
+                                    .padding(.bottom,50)
+                                    .padding(.top,250)
+                                Text("분석중입니다")
+                                    .frame(width:340,alignment: .center)
+                                    .fixedSize(horizontal: false, vertical: true)
+                                Text("잠시만 기다려주세요")
+                                    .frame(width:340,alignment: .center)
+                                Text("답변이 잘려보이거나 너무 오래 기다리는 경우,")
+                                    .frame(width:340,alignment: .center)
+                                Text("화면을 내린 후 다시 로드해주시기 바랍니다.")
+                                    .frame(width:340,alignment: .center)
+                            }
+                            else{
+                                Text("면접 전체 피드백")
+                                    .font(.custom("Arial-BoldMT", size: 35))
+                                    .foregroundColor(Color.black)
+                                    .padding(.bottom,20)
+                                Text(fullFeedbackText)
+                                    .frame(width:340)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }.padding(.top, 20)
+                    }.task{
+                        do{
+                            var prompt = """
+    전체 대화에 대해 피드백을 제공해줘야 한다.
+    피드백은 반드시 각각의 질문에 답변하는 형식이 아닌, 모든 조건을 만족하는 하나의 지문으로 완성하라.
+    피드백 이외의 불필요한 문장은 삭제하여 글자수를 최소화 해야한다. 해당 문장에 대한 요약이나 해당 문장 전체를 언급하는 것을 최대한 자제하여 글자수를 최소화하라.
+    피드백은 최대 500글자 이하로 작성되어야만한다.
+    하나의 지문은 아래의 조건을 모두 만족해야만 한다.
+    1. 면접대상자의 답변 내용을 참고하여 면접 대상자에 대한 인상을 간략하게 설명한다.
+    2. \(cf?.jobCategory!)직무에 대해 (1.)설명에서의 인상이 어떠한 영향을 미칠 수 있는지 설명한다. 이후 그 영향에 대한 조언도 함께하라
+    3. 면접대상자의 답변을 참고하여 \(cf?.jobCategory!)직무에서 어떠한 부분에서 아쉬운지 설명하라. 그리고 아쉬운 부분을 해결하기 위한 방법에 대해서도 설명하라.
+    4. 면접대상자의 답변을 참고하여 100점이 가장 모범적인 답변이라고 하였을때 (2.)과 (3.)에서의 평가를 근거로 하여 해당 문장이 몇점정도의 답변인지 객관적으로 0점부터 100점사이의 점수를 측정하여 이를 제공해야한다.
+    예시:
+    면접대상자님의 인상은 ???, ???이라는 인상을 받았습니다. 이러한 특징은 ??? 직무에서 ??? 업무능력에서 ???한 능력에 ???한 영향을 미칠 수 있습니다. 그러므로 면접대상자님께서는 ??? 하는것이 좋다고 생각합니다.
+    
+    하지만 면접대상자님께서 ???의 답변을 보아 ???한 부분이 아쉽다고 생각합니다. 이러한 부분은 ??? 직무에서 ???하기때문에 이러한 부분은 개선할 필요가 있습니다. ???한 방법으로 답변하거나 혹은 ???한 활동을 하는것도 좋아보입니다.
+    
+    면접대상자님의 답변을 참고하여 제가 면접대상자님께 점수를 드린다면 100점 만점에 ???점입니다.
+    """
+                            vm.api.changePrompt(text: prompt)
+                            fullFeedbackText = try await vm.api.getFeedback(
+                                    text:
+"""
+면접 전체에 대해 피드백 해줘
+""")
+                        }
+                        catch{
+                            print(error.localizedDescription)
+                        }
+                    }
+                })
+                .frame(width:500,height:100)
+                .background(Color.white)
+                .shadow(radius:10,x:1,y:0)
+                .overlay{
+                    Text("면접 전체 피드백")
+                        .font(.custom("Arial", size: 25))
+                        .foregroundColor(Color.black)
+                }
+                
+                
+        }
         Button(action:{
-            //print(vm.messages)
+            
         },label:{
-            Text("test")
+            
         }).hidden()
     }
     
@@ -186,7 +266,9 @@ struct feedbackSheetView: View{
     
     var body: some View{
         ScrollView{
-            message.padding(.bottom, 30)
+            message
+                .padding(.bottom, 20)
+                .padding(.top, 20)
             if(cf.dialogType == ContextFlow.DialogType.english){
                 Button(action:{
                     Task{
@@ -212,14 +294,25 @@ struct feedbackSheetView: View{
             if(text == "")
             {
                 VStack{
-                    DotLoadingView().frame(width: 90, height: 45).padding(.bottom,20)
+                    DotLoadingView()
+                        .frame(width: 90, height: 45)
+                        .padding(.bottom,20)
+                        .padding(.top, 30)
                     Text("분석중입니다")
                         .frame(width:340,alignment: .center)
                         .fixedSize(horizontal: false, vertical: true)
                     Text("잠시만 기다려주세요")
                         .frame(width:340,alignment: .center)
+                    Text("답변이 잘려보이거나 너무 오래 기다리는 경우,")
+                        .frame(width:340,alignment: .center)
+                    Text("화면을 내린 후 다시 로드해주시기 바랍니다.")
+                        .frame(width:340,alignment: .center)
                 }
             }else{
+                Text("피드백")
+                    .font(.custom("Arial-BoldMT", size: 35))
+                    .foregroundColor(Color.black)
+                    .padding(.bottom,20)
                 Text(text)
                     .frame(width:340)
                     .fixedSize(horizontal: false, vertical: true)
@@ -228,8 +321,7 @@ struct feedbackSheetView: View{
             do{
                 var prompt = ""
                 
-                if(cf.dialogType == ContextFlow.DialogType.real ||
-                   cf.dialogType == ContextFlow.DialogType.single){
+                if(cf.dialogType == ContextFlow.DialogType.real){
                     prompt = """
 이제부턴 면접에 대해 피드백을 제공해줘야 한다.
 피드백은 반드시 각각의 질문에 답변하는 형식이 아닌, 모든 조건을 만족하는 하나의 지문으로 완성하라.
@@ -240,7 +332,6 @@ struct feedbackSheetView: View{
 1. 피드백은 \(cf.jobCategory!)직무에 알맞아야 한다.
 """
                     if(message.isAssistant){
-                        print("it is Assistant's question")
                         prompt +=
 """
 2. 피드백은 해당 문장이 어떠한 의도의 질문인지 그 의도에 대한 해설을 포함해야한다.
@@ -249,14 +340,13 @@ struct feedbackSheetView: View{
 예시: 해당 질문은 ??? 직무의 ??? 부분에 대해 평가하기 위한 질문입니다. 이 질문의 의도로는 ???, ??? 등의 항목을 면접 대상자에게서 살펴보기 위한 것으로, 이에 대해 ???에 대해 중점적으로 답변하는 것이 좋습니다. 만약 답변을 한다면 "???"과 같이 답변하는 것이 좋은 질문입니다.
 """
                     }else{
-                        print("it is user's answer")
                         prompt +=
 """
 2. 피드백은 오로지 해당 문장에 대해서만 답변해야한다. 예외적으로 (5.)의 조건을 만족시키기 위한 경우와 해당 문장 이전의 답변에 대해서만 예외적으로 문맥을 고려하라.
 3. 피드백은 해당 문장이 자기소개서등의 문장이아니라, "면접"이라는 상황에서 적절했는지에 대한 객관적인 평가를 제시해야한다. 면접상황에서 적절했는지를 평가하기 위한 요소로는 답변의 길이, 이전 답변들과의 일관성, \(cf.jobCategory!)직무와의 연관성, \(cf.jobCategory!)직무에 대한 열정, 논리적인 전개의 정도, 질문에 대한 이해도 등이다. 특히 \(cf.jobCategory!)직무와의 연관성과 열정 그리고 답변의 길이의 적절성은 중요한 평가사항이다
 4. (3.)의 말미에는 100점이 가장 모범적인 답변이라고 하였을때 (3.)에서의 평가를 근거로 하여 해당 문장이 몇점정도의 답변인지 객관적으로 0점부터 100점사이의 점수를 측정하여 이를 제공해야한다.
 5. 피드백은 해당 문장에 대한 평가 이후, 최대한 간략한 해당 문장의 모범적인 답변을 포함하라. 만약 면접대상자의 답변 중, 참고할만한 내용이 있으면 참고하라.
-예시: 해당 답변은 ??? 직무의 ???질문에 대한 ???한 답변으로 보입니다. ???질문은 ???한 의도를 파악하기 위한 질문으로 이에 대해 ???의 답변은 ???하다고 평가할 수 있습니다. 특히 ???직무에서 이러한 답변은 ???하다고 평가될 수 있으므로 ???합니다. 만약 제가 이 답변에 대한 점수를 줄 수 있다면 100점 만점에 ???점이라고 생각되는 답변입니다. 100점이 아닌 이유로는, ???이라는 점이 더 보완된다면 더욱 좋은 평가를 받을 수 있습니다. 만약 제가 면접대상자님의 답변을 기반으로 수정한다면 "???"으로 수정할 것입니다.
+예시: 해당 답변은 ??? 직무의 ???질문에 대한 ???한 답변으로 보입니다. ???질문은 ???한 의도를 파악하기 위한 질문으로 이에 대해 ???의 답변은 ???하다고 평가할 수 있습니다. 특히 ???직무에서 이러한 답변은 ???하다고 평가될 수 있으므로 ???합니다. 제가 이 답변에 대한 점수를 준다면 100점 만점에 ???점이라고 생각되는 답변입니다. 100점이 아닌 이유로는, ???이라는 점이 더 보완된다면 더욱 좋은 평가를 받을 수 있습니다. 만약 제가 면접대상자님의 답변을 기반으로 수정한다면 "???"으로 수정할 것입니다.
 """
                     }
                 } else if(cf.dialogType == ContextFlow.DialogType.english)
@@ -282,6 +372,34 @@ struct feedbackSheetView: View{
 영 ??? / 한 ???
 ...
 """
+                } else if(cf.dialogType == ContextFlow.DialogType.single)
+                {
+                    prompt = """
+이제부턴 대화에 대해 피드백을 제공해줘야 한다.
+피드백은 반드시 각각의 질문에 답변하는 형식이 아닌, 모든 조건을 만족하는 하나의 지문으로 완성하라.
+피드백 이외의 불필요한 문장은 삭제하여 글자수를 최소화 해야한다. 해당 문장에 대한 요약이나 해당 문장 전체를 언급하는 것을 최대한 자제하여 글자수를 최소화하라.
+피드백은 최대 500글자 이하로 작성되어야만한다.
+하나의 지문은 아래의 조건을 모두 만족해야만 한다.
+피드백이 필요한 문장은 이하 해당 문장으로 칭한다.
+"""
+                    if(message.isAssistant)
+                    {
+                        prompt += """
+1. 피드백은 해당 문장이 어떠한 의도의 질문인지 그 의도에 대한 해설을 포함해야한다.
+2. 피드백은 해당 문장에 대한 적절한 답변에는 어떤 내용이 표현되야 하는지를 포함해야한다.
+3. 피드백은 (2.)에서 설명한 내용이 적절하게 표현되도록 해당 질문에 대한 모범 답변을 최대한 간략하게 제시하라.
+예시: 해당 질문은 ??? 부분에 대해 평가하기 위한 질문입니다. 이 질문의 의도로는 ???, ??? 등의 항목을 면접 대상자에게서 살펴보기 위한 것으로, 이에 대해 ???에 대해 중점적으로 답변하는 것이 좋습니다. 만약 답변을 한다면 "???"과 같이 답변하는 것이 좋은 질문입니다.
+"""
+                    }else
+                    {
+                        prompt += """
+1. 피드백은 오로지 해당 문장에 대해서만 답변해야한다. 예외적으로 (5.)의 조건을 만족시키기 위한 경우와 해당 문장 이전의 답변에 대해서만 예외적으로 문맥을 고려하라.
+2. "면접"이라는 상황에서 적절했는지에 대한 객관적인 평가를 제시해야한다. 면접상황에서 적절했는지를 평가하기 위한 요소로는 답변의 길이, 이전 답변들과의 일관성, 직무에 대한 열정, 논리적인 전개의 정도, 질문에 대한 이해도 등이다. 특히 답변의 길이의 적절성은 중요한 평가사항이다
+3. (2.)의 말미에는 100점이 가장 모범적인 답변이라고 하였을때 (3.)에서의 평가를 근거로 하여 해당 문장이 몇점정도의 답변인지 객관적으로 0점부터 100점사이의 점수를 측정하여 이를 제공해야한다.
+4. 피드백은 해당 문장에 대한 평가 이후, 최대한 간략한 해당 문장의 모범적인 답변을 포함하라. 만약 면접대상자의 답변 중, 참고할만한 내용이 있으면 참고하라.
+예시: 해당 답변은 ???질문에 대한 ???한 답변으로 보입니다. ???질문은 ???한 의도를 파악하기 위한 질문으로 이에 대해 ???의 답변은 ???하다고 평가할 수 있습니다. 특히 ???직무에서 이러한 답변은 ???하다고 평가될 수 있으므로 ???합니다. 만약 제가 이 답변에 대한 점수를 줄 수 있다면 100점 만점에 ???점이라고 생각되는 답변입니다. 100점이 아닌 이유로는, ???이라는 점이 더 보완된다면 더욱 좋은 평가를 받을 수 있습니다. 만약 제가 면접대상자님의 답변을 기반으로 수정한다면 "???"으로 수정할 것입니다.
+"""
+                    }
                 }
                 
                 vm.api.changePrompt(text: prompt)

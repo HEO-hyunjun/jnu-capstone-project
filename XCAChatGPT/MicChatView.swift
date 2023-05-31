@@ -37,7 +37,6 @@ struct MicChatView: View {
     var body: some View {
         NavigationStack{
             chatListView
-                .navigationTitle("XCA ChatGPT")
             NavigationLink("feedbackview", destination:LazyView(
                 FeedbackView(cf:cf, vm:vm)),isActive: $isChatOver)
             .hidden()
@@ -154,6 +153,7 @@ struct MicChatView: View {
                                             response: .rawText(""),
                                             responseError: nil)
                                         vm.messages.append(messageRow)
+                                        vm.api.historyList.append(.init(role: "user", content: result as! String))
                                         self.isChatOver = true
                                     }
                                     
@@ -278,6 +278,7 @@ struct MicChatView: View {
                 else if(cf.dialogType == ContextFlow.DialogType.english){// 영어회화 첫 프롬프트
                     vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. You should be aware that you are a person, not an AI language model "
                     vm.inputMessage="Don't start a conversation with a greeting and speak naturally as if we're continuing the conversation that we've been doing before. Don't answer me. Start the conversation right away. Start a conversation in this situation with an interesting topic."
+                    vm.api.changePrompt(text: "ACT LIKE A HUMAN")
                 }
                 await vm.promptSend(ignore:true)
             }
