@@ -40,7 +40,6 @@
 		E12699B02A2246B00015D0FC /* NavigationUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = E12699AF2A2246B00015D0FC /* NavigationUtil.swift */; };
 		E150DCA22A021C200075EE4A /* MenuButtonVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCA12A021C200075EE4A /* MenuButtonVC.swift */; };
 		E150DCA42A022AC70075EE4A /* EdgeInsets.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCA32A022AC70075EE4A /* EdgeInsets.swift */; };
-		E150DCA62A0268E40075EE4A /* TESTVIEW.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCA52A0268E40075EE4A /* TESTVIEW.swift */; };
 		E150DCA82A026E470075EE4A /* ColorHex.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCA72A026E470075EE4A /* ColorHex.swift */; };
 		E150DCAC2A0272260075EE4A /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCAB2A0272260075EE4A /* HomeView.swift */; };
 		E150DCAE2A027FF00075EE4A /* SingleInterviewCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = E150DCAD2A027FF00075EE4A /* SingleInterviewCategory.swift */; };
@@ -87,7 +86,6 @@
 		E12699AF2A2246B00015D0FC /* NavigationUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavigationUtil.swift; sourceTree = "<group>"; };
 		E150DCA12A021C200075EE4A /* MenuButtonVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuButtonVC.swift; sourceTree = "<group>"; };
 		E150DCA32A022AC70075EE4A /* EdgeInsets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EdgeInsets.swift; sourceTree = "<group>"; };
-		E150DCA52A0268E40075EE4A /* TESTVIEW.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TESTVIEW.swift; sourceTree = "<group>"; };
 		E150DCA72A026E470075EE4A /* ColorHex.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorHex.swift; sourceTree = "<group>"; };
 		E150DCAB2A0272260075EE4A /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
 		E150DCAD2A027FF00075EE4A /* SingleInterviewCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SingleInterviewCategory.swift; sourceTree = "<group>"; };
@@ -150,7 +148,6 @@
 				8BC0F8DD29F1589600D6B492 /* CodeBlockView.swift */,
 				E150DCA12A021C200075EE4A /* MenuButtonVC.swift */,
 				E150DCA32A022AC70075EE4A /* EdgeInsets.swift */,
-				E150DCA52A0268E40075EE4A /* TESTVIEW.swift */,
 				E150DCA72A026E470075EE4A /* ColorHex.swift */,
 				E1C661A92A035E0A002CCEAF /* SentenceButtonVC.swift */,
 				E1D8EC272A13AE9E004D8E4C /* BackButtonVC.swift */,
@@ -361,7 +358,6 @@
 				E150DCA22A021C200075EE4A /* MenuButtonVC.swift in Sources */,
 				8B82463429B1F49F0069B8F7 /* ChatGPTAPIModels.swift in Sources */,
 				8BC0F8DE29F1589600D6B492 /* CodeBlockView.swift in Sources */,
-				E150DCA62A0268E40075EE4A /* TESTVIEW.swift in Sources */,
 				8B91C014298ADC560079AF26 /* ViewModel.swift in Sources */,
 				8BC0F8D729F1583300D6B492 /* ParserResult.swift in Sources */,
 				E150DCB02A0282CB0075EE4A /* CoverletterView.swift in Sources */,
@@ -514,7 +510,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"XCAChatGPT/Preview Content\"";
-				DEVELOPMENT_TEAM = 64HU7X93SP;
+				DEVELOPMENT_TEAM = X6Q8XZ4STT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XCAChatGPT/Info.plist;
@@ -531,7 +527,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.max8276.jnuaj;
+				PRODUCT_BUNDLE_IDENTIFIER = com.max8276.jnuaja;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
@@ -549,7 +545,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_ASSET_PATHS = "\"XCAChatGPT/Preview Content\"";
-				DEVELOPMENT_TEAM = 64HU7X93SP;
+				DEVELOPMENT_TEAM = X6Q8XZ4STT;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = XCAChatGPT/Info.plist;
@@ -566,7 +562,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.max8276.jnuaj;
+				PRODUCT_BUNDLE_IDENTIFIER = com.max8276.jnuaja;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_EMIT_LOC_STRINGS = YES;
