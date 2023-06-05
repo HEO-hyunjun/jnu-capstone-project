@@ -25,6 +25,7 @@ struct MicChatView: View {
     @State var overCount:Int = 0
     @State var isChatOver: Bool = false
     @State var sendCount:Int = 0
+    @State var isSTTing: Bool = false
     
     var realInterviewPrompts:[String] = [
         "이전 답변에 대해서 단 하나의 추가 질문을 하라",
@@ -45,7 +46,7 @@ struct MicChatView: View {
             if(cf.dialogType == ContextFlow.DialogType.single){
                 self.overCount = 1
             }else{
-                self.overCount = 9
+                self.overCount = 4
             }
         }
     }
@@ -118,7 +119,7 @@ struct MicChatView: View {
             //                .focused($isTextFieldFocused)
             //                .disabled(vm.isInteractingWithChatGPT)
             
-            if vm.isInteractingWithChatGPT {
+            if vm.isInteractingWithChatGPT && !isSTTing {
                 DotLoadingView().frame(width: 60, height: 60).overlay(
                     RoundedRectangle(cornerRadius: 120)
                         .stroke(.black, lineWidth: 4)
@@ -137,8 +138,9 @@ struct MicChatView: View {
                             self.isRecording.toggle()
                             do{
                                 let rec = try Data(contentsOf:self.recFileString)
+                                isSTTing = true
                                 STT.shared.getText(data: rec, lang:lang){result in
-                                    print(result)
+                                    //print(result)
                                     vm.inputMessage = result as! String
                                     self.sendCount = self.sendCount + 1
                                     
@@ -181,8 +183,10 @@ struct MicChatView: View {
                                     Task{@MainActor in
                                         scrollToBottom(proxy: proxy)
                                         await vm.sendTapped()
+                                        isSTTing = false
                                     }
                                 }
+                                
                             }catch{
                                 print(error.localizedDescription)
                             }
@@ -276,9 +280,9 @@ struct MicChatView: View {
                     vm.inputMessage="너는 지금부터 면접관이고 나는 지원자야. 실제 면접처럼 하나씩만 질문해줘."
                 }
                 else if(cf.dialogType == ContextFlow.DialogType.english){// 영어회화 첫 프롬프트
-                    vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. You should be aware that you are a person, not an AI language model "
+                    vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. Ask only one question. 5. If user ask about you then do not mention yourself as AI language model. Answer or Act like any person in context."
                     vm.inputMessage="Don't start a conversation with a greeting and speak naturally as if we're continuing the conversation that we've been doing before. Don't answer me. Start the conversation right away. Start a conversation in this situation with an interesting topic."
-                    vm.api.changePrompt(text: "ACT LIKE A HUMAN")
+                    //vm.api.changePrompt(text: "ACT A USER'S HUMAN FREIND")
                 }
                 await vm.promptSend(ignore:true)
             }

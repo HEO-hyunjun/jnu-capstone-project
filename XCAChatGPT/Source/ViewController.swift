@@ -12,12 +12,6 @@ class ViewController {
     //
     //    }
     
-    // 로그인 버튼을 눌렀을 때 로그인 서버 통신 함수를 호출합니다.
-    @IBAction func loginButtonTapped(){
-        print("getQuestion")
-        //        getQuestion()
-    }
-    
     
     var question: [String] = []
     func questionList(category:String) async->[String]{

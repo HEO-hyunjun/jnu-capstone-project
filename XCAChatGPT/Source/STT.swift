@@ -23,7 +23,7 @@ class STT {
                 completion(responseString ?? "없는데용?!@!@")
             
         }
-            }
+    }
         
     
 }

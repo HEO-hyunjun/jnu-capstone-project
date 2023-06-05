@@ -14,7 +14,6 @@ class ViewModel: ObservableObject {
     @Published var isInteractingWithChatGPT = false
     @Published var messages: [MessageRow] = []
     @Published var inputMessage: String = ""
-    @State var pathStack = NavigationPath()
     @Published public var chatCount:Int
 
     #if !os(watchOS)
@@ -228,11 +227,11 @@ class ViewModel: ObservableObject {
             messageRow.response = .rawText(stream.trimmingCharacters(in:.whitespacesAndNewlines))
             //self.messages[self.messages.count - 1] = messageRow
             
-            if (!ignore){
+//            if (!ignore){
                 //프롬프트의 경우 무시
-                //답변에 성공하면 카운트 + 1
-                self.chatCount = self.chatCount + 1
-            }
+                //답변에 성공하면 카운트 + 1 -> micchat에서 조정하므로 의미없음
+//                self.chatCount = self.chatCount + 1
+//            }
         } catch {
             messageRow.responseError = error.localizedDescription
         }
