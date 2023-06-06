@@ -27,6 +27,8 @@ struct MicChatView: View {
     @State var sendCount:Int = 0
     @State var isSTTing: Bool = false
     
+    @State private var startStt:CFAbsoluteTime!
+    
     var realInterviewPrompts:[String] = [
         "이전 답변에 대해서 단 하나의 추가 질문을 하라",
         "면접 상황에 맞게 이전 질문과 다른 적절한 주제의 새로운 질문을 하라" ,
@@ -46,7 +48,7 @@ struct MicChatView: View {
             if(cf.dialogType == ContextFlow.DialogType.single){
                 self.overCount = 1
             }else{
-                self.overCount = 4
+                self.overCount = 8
             }
         }
     }
@@ -102,6 +104,11 @@ struct MicChatView: View {
                         }
                     }
                 }
+                if (startStt != nil && !vm.isInteractingWithChatGPT){
+                    print("답변까지 걸린 시간")
+                    print(CFAbsoluteTimeGetCurrent() - startStt!)
+                    print(vm.api.historyList)
+                }
             }
         }
         .background(colorScheme == .light ? .white : Color(red: 52/255, green: 53/255, blue: 65/255, opacity: 0.5))
@@ -109,9 +116,6 @@ struct MicChatView: View {
     
     func bottomView(image: String, proxy: ScrollViewProxy) -> some View {
         VStack {
-            
-            
-            
             //            TextField("Send message", text: $vm.inputMessage, axis: .vertical)
             //                #if os(iOS) || os(macOS)
             //                .textFieldStyle(.roundedBorder)
@@ -139,6 +143,8 @@ struct MicChatView: View {
                             do{
                                 let rec = try Data(contentsOf:self.recFileString)
                                 isSTTing = true
+                                startStt = CFAbsoluteTimeGetCurrent()
+                                print("STT요청 시작")
                                 STT.shared.getText(data: rec, lang:lang){result in
                                     //print(result)
                                     vm.inputMessage = result as! String
@@ -158,6 +164,8 @@ struct MicChatView: View {
                                         vm.api.historyList.append(.init(role: "user", content: result as! String))
                                         self.isChatOver = true
                                     }
+                                    print("STT 출력까지 걸린시간")
+                                    print(CFAbsoluteTimeGetCurrent() - startStt!)
                                     
                                     //면접 프롬프트
                                     if(cf.dialogType == ContextFlow.DialogType.real)
@@ -199,7 +207,6 @@ struct MicChatView: View {
                                     player.stop()
                                 }
                             }
-     
                         
                         
                         let fileManager = FileManager.default
@@ -274,10 +281,17 @@ struct MicChatView: View {
                     vm.api.changePrompt(text:"질문 전에 짧게 인사를 하고, 자기소개를 부탁하는 질문으로 면접을 시작하라. 본인이 면접관임을 알릴 필요는 없다.")
                     vm.api.systemMessage.content+="지원 직무와 관련되지 않은 질문은 하지 말 것. 압박 면접 분위기를 조성하라. 지원자가 지원 직무와 관련없는 대답을 한다면 그 대답에 대해 직무와 연관지어서 압박 질문하라. 사과하지 말 것. 이전에 했던 질문과 중복되는 질문은 하지 말 것. 다음은 지원자에 대한 정보이다. 이를 참고하여 면접을 진행하라."
                     vm.api.systemMessage.content+="1. 지원자가 지원한 직무 분야는 "+(cf.jobCategory ?? "")+"이다. "
-                    vm.api.systemMessage.content+="2. 다음은 지원자가 제출한 자기소개서 문항과 그에 대한 답변이다."
-                    vm.api.systemMessage.content+="문항 :"+(cf.coverLetterQuestion ?? "")
-                    vm.api.systemMessage.content+=", 답변 : "+(cf.coverLetterAnswer ?? "")
+                    
+                    if(cf.coverLetterAnswer != "")
+                    {
+                        vm.api.systemMessage.content+="2. 다음은 지원자가 제출한 자기소개서 문항과 그에 대한 답변이다."
+                        vm.api.systemMessage.content+="문항 :"+(cf.coverLetterQuestion ?? "")
+                        vm.api.systemMessage.content+=", 답변 : "+(cf.coverLetterAnswer ?? "")
+                    }else{
+                        vm.api.systemMessage.content+="자기소개서 : 자기소개서가 비어있습니다."
+                    }
                     vm.inputMessage="너는 지금부터 면접관이고 나는 지원자야. 실제 면접처럼 하나씩만 질문해줘."
+                    print(vm.api.systemMessage.content)
                 }
                 else if(cf.dialogType == ContextFlow.DialogType.english){// 영어회화 첫 프롬프트
                     vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. Ask only one question. 5. If user ask about you then do not mention yourself as AI language model. Answer or Act like any person in context."

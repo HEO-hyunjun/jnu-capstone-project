@@ -34,34 +34,32 @@ struct FeedbackView: View {
     
     
     var body: some View {
-            chatListView
-                .navigationTitle("피드백")
-                .navigationBarTitleDisplayMode(.inline)
-                .navigationBarBackButtonHidden(true)
-                .navigationBarItems(leading: Button(action:{
-                    //path = []
-                    appState.rootViewId = UUID()
-                },label: {
-                    Text("< 홈으로")
-                }))
-                .onAppear{
-                    vm.api.temperature = 0
-                    for message in vm.messages  {
-                        let m = message.copy(messageRow: message)
-                        self.messages.append(FeedbackButtonView(message: m))
-                        self.messages.append(FeedbackButtonView(message: m,isAssistant: true))
-                    }
+        VStack{
+        chatListView
+            .navigationTitle("피드백")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .navigationBarItems(leading: Button(action:{
+                //path = []
+                appState.rootViewId = UUID()
+            },label: {
+                Text("< 홈으로")
+            }))
+            .onAppear{
+                vm.api.temperature = 0
+                for message in vm.messages  {
+                    let m = message.copy(messageRow: message)
+                    self.messages.append(FeedbackButtonView(message: m))
+                    self.messages.append(FeedbackButtonView(message: m,isAssistant: true))
                 }
+            }
         if(cf?.dialogType == ContextFlow.DialogType.real)
-        {
+            {
             Button(action:{
                 isFullFeedback = true
             },label:{
-//                Text("면접 전체 피드백")
-//                    .font(.custom("Arial", size: 25))
-//                    .foregroundColor(Color.black)
+                Text(" ").frame(width:400, height:90).background(Color.white)
             }).buttonStyle(PlainButtonStyle())
-                .frame(height:80)
                 .sheet(isPresented: $isFullFeedback, content: {
                     ScrollView{
                         VStack{
@@ -74,7 +72,9 @@ struct FeedbackView: View {
                                     .fixedSize(horizontal: false, vertical: true)
                                 Text("잠시만 기다려주세요")
                                     .frame(width:340,alignment: .center)
-                                Text("답변이 잘려보이거나 너무 오래 기다리는 경우,")
+                                Text("답변이 잘려보이거나")
+                                    .frame(width:340,alignment: .center)
+                                Text("너무 오랜 시간이 걸릴 경우,")
                                     .frame(width:340,alignment: .center)
                                 Text("화면을 내린 후 다시 로드해주시기 바랍니다.")
                                     .frame(width:340,alignment: .center)
@@ -110,7 +110,7 @@ struct FeedbackView: View {
     """
                             vm.api.changePrompt(text: prompt)
                             fullFeedbackText = try await vm.api.getFeedback(
-                                    text:
+                                text:
 """
 면접 전체에 대해 피드백 해줘
 """)
@@ -120,16 +120,15 @@ struct FeedbackView: View {
                         }
                     }
                 })
-                .frame(width:500,height:100)
-                .background(Color.white)
+                .frame(width:400,height:90)
                 .shadow(radius:10,x:1,y:0)
                 .overlay{
                     Text("면접 전체 피드백")
                         .font(.custom("Arial", size: 25))
                         .foregroundColor(Color.black)
                 }
-                
-                
+            
+        }
         }
         Button(action:{
             
@@ -303,7 +302,9 @@ struct feedbackSheetView: View{
                         .fixedSize(horizontal: false, vertical: true)
                     Text("잠시만 기다려주세요")
                         .frame(width:340,alignment: .center)
-                    Text("답변이 잘려보이거나 너무 오래 걸리는 경우,")
+                    Text("답변이 잘려보이거나")
+                        .frame(width:340,alignment: .center)
+                    Text("너무 오랜 시간이 걸릴 경우,")
                         .frame(width:340,alignment: .center)
                     Text("화면을 내린 후 다시 로드해주시기 바랍니다.")
                         .frame(width:340,alignment: .center)
@@ -475,5 +476,4 @@ struct FeedbackButtonView: View, Identifiable{
         }
     }
 }
-
 
