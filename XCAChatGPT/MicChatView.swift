@@ -48,7 +48,7 @@ struct MicChatView: View {
             if(cf.dialogType == ContextFlow.DialogType.single){
                 self.overCount = 1
             }else{
-                self.overCount = 8
+                self.overCount = 4
             }
         }
     }
@@ -294,7 +294,7 @@ struct MicChatView: View {
                     print(vm.api.systemMessage.content)
                 }
                 else if(cf.dialogType == ContextFlow.DialogType.english){// 영어회화 첫 프롬프트
-                    vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. Ask only one question. 5. If user ask about you then do not mention yourself as AI language model. Answer or Act like any person in context."
+                    vm.api.systemMessage.content="you're my interlocutor as a human being. The next sentence is our current conversation situation."+(cf.dialogueCase?.split(separator: "-")[1] ?? "")+". Let's talk realistically as if we really belong to this situation. Please keep the following requirements. 1. Say it as easily as possible. 2. Communicate in English no matter what. 3. Don't just ask question and speak your mind naturally like a real conversation. 4. Ask only one question. 5. Do not mention yourself as AI language model. Answer or Act like any person in context."
                     vm.inputMessage="Don't start a conversation with a greeting and speak naturally as if we're continuing the conversation that we've been doing before. Don't answer me. Start the conversation right away. Start a conversation in this situation with an interesting topic."
                     //vm.api.changePrompt(text: "ACT A USER'S HUMAN FREIND")
                 }
