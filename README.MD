@@ -30,19 +30,19 @@
 ![](./readme/usecase.png)
 
 # 구현 환경
-Application
-개발 언어 Swift
-개발 환경 Xcode
+- Application
+  - 개발 언어 Swift
+  - 개발 환경 Xcode
 
-Server
-개발 언어 : Java
-개발 환경 : Spring
-DBMS : MySQL
+- Server
+  - 개발 언어 : Java
+  - 개발 환경 : Spring
+  - DBMS : MySQL
 
-대형 언어 모델(LLM) : GPT-3.5-Turbo
-TTS & STT API : Google Cloud
-형상관리 : Git
-협업도구 : Notion
+- 대형 언어 모델(LLM) : GPT-3.5-Turbo
+- TTS & STT API : Google Cloud
+- 형상관리 : Git
+- 협업도구 : Notion
 
-이 프로젝트는 다음 레포지토리를 참조했습니다.
-https://github.com/alfianlosari/ChatGPTSwiftUI
+### 참조
+- 이 프로젝트는 다음 [레포지토리](https://github.com/alfianlosari/ChatGPTSwiftUI)를 참조했습니다. 
