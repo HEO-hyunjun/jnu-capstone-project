@@ -13,6 +13,7 @@
 - DataBase 구축 
 - Application UI 설계                         
 - 서버구축
+
 허현준 [@HEO-hyunjun](https://github.com/HEO-hyunjun)
 - 자료 조사 및 데이터 수집(공통)          
 - API통신
