@@ -1,31 +1,34 @@
-# ChatGPT SwiftUI iOS, macOS, watchOS, tvOS App
+# 말해뭐해
+학위논문 [모의 면접 및 영어 커뮤니케이션을 위한 대화형 인공지능 기반 애플리케이션](https://gjguswns.synology.me:10003/d/s/z7NurcG31ypAkgDWF6Jy4EI2wKqJ2D6S/xc0yiL0q_WxsvL1e3zy05ZN1Tzr-pcTv-a7qAI_Q43gs)에서 사용된 어플리케이션입니다.
 
-![Alt text](https://imagizer.imageshack.com/v2/640x480q90/922/hmlopw.png "image")
+# 역할
+권 해	-	자료 조사 및 데이터 수집(공통)          
+- DataBase 구축 
+-	Application UI 설계                         
+- 서버구축
+허현준	
+-	자료 조사 및 데이터 수집(공통)          
+- API통신
+-	세부기능구현                                  
+- 프롬프트 작성
+# 시스템 개요
+![](./readme/system_overview.png)
 
-This is a native iOS, macOS, watchOS, tvOS App for interacting with ChatGPT built using SwiftUI and OpenAPI API. It's using Official ChatGPT endpoint with `gpt-3.5-turbo` model.
+# 결과
+- [단일면접 유튜브](https://youtube.com/shorts/kIc-BpS6UE4?feature=share)
+- [실전면접 유튜브](https://youtu.be/Gi40UinxMEY)
+- [영어회화 유튜브](https://youtu.be/XJKW4cpnrIo)
 
-It is also able to render response with markdown and code syntax highlighting.
+# 개발 환경
+Application	개발 언어	Front : Swift
+Backend : Swift
+	개발 환경	Front : Xcode
+Backend : Vapor
+DBMS	My SQL
+Chat bot	ChatGPT 3.5 Turbo
+TTS & SST	AppleSpeech, Google Cloud or Naver Clova
+형상 관리	GitHub
+협업도구	NOTION
 
-## Video tutorial
-- [iOS YouTube](https://youtu.be/PLEgTCT20zU)
-- [macOS YouTube](https://youtu.be/Wl1cDvwpJoE)
-- [watchOS YouTube](https://youtu.be/DwXy0gKz1GY)
-- [tvOS YouTube](https://youtu.be/7RQHG7GXJ_U)
-- [Upgrade to Official API YouTube](https://youtu.be/9byLhs5hQjI)
-
-## Requirements
-- Xcode 14 
-- Register at openai.com/api
-- Create API Key
-- Paste API key in ContentView where the ChatGPTAPI instance is declared
-
-## ChatGPTSwift API Lib
-You can use this standalone api client to access ChatGPT API, you can add dependency for [ChatGPTSwift](https://github.com/alfianlosari/ChatGPTSwift) to access the API only if you want to integrate into your own app.
-
-## GPT Encoder Lib
-I've also created [GPTEncoder](https://github.com/alfianlosari/GPTEncoder) Swift BPE Encoder/Decoder for OpenAI GPT Models. A programmatic interface for tokenizing text for OpenAI GPT API.
-
-## GPT Tokenizer UI Lib
-I've also created [GPTTokenizerUI](https://github.com/alfianlosari/GPTTokenizerUI), a SPM lib you can integrate in your app for providing GUI to input text and show the tokenization results used by GPT API.
-
-![Alt text](https://imagizer.imageshack.com/v2/640x480q70/922/CEVvrE.png "image")
+이 프로젝트는 다음 레포지토리를 참조했습니다.
+https://github.com/alfianlosari/ChatGPTSwiftUI
