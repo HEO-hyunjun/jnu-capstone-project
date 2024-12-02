@@ -12,7 +12,7 @@
 -	세부기능구현                                  
 - 프롬프트 작성
 # 시스템 개요
-![](./readme/system_overview.png)
+![](./스크린샷 2023-06-06 오후 9.34.53.png)
 
 # 결과
 - [단일면접 유튜브](https://youtube.com/shorts/kIc-BpS6UE4?feature=share)
